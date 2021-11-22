@@ -31,7 +31,18 @@ for(let a = 0; a < proccessed.length; a++){
         } else{
             proccessed[a][b] = proccessed[a][b].split(':');
             if(values.includes(proccessed[a][b][0])){
-                correctvalues++;
+
+                /*part 2*/
+                if(validateValue(proccessed[a][b][0], proccessed[a][b][1])){
+                    correctvalues++;
+                } else{
+                    console.log(proccessed[a][b][0] + ': ' + proccessed[a][b][1]);
+                }
+                /*part 2 end*/
+
+                /*part 1*/
+                // correctvalues++;
+                /*part 1 end*/
             }
         }
     }
@@ -40,5 +51,62 @@ for(let a = 0; a < proccessed.length; a++){
     }
     
 }
+/*part 2*/
+function validateValue(type, value){
+    if(type === 'byr'){
+        if(value >= 1920 && value <= 2002){
+            return true;
+        }
+    }
+    if(type === 'iyr'){
+        if(value >= 2010 && value <= 2020){
+            return true;
+        }
+    }
+    if(type === 'eyr'){
+        if(value >= 2020 && value <= 2030){
+            return true;
+        }
+    }
+    if(type === 'hgt'){
+        if(value.includes('cm')){
+            if(value.replace('cm', '') >= 150 && value.replace('cm', '') <= 193){
+                return true;
+            }
+        }
+        if(value.includes('in')){
+            if(value.replace('in', '') >= 59 && value.replace('in', '') <= 76){
+                return true;
+            }
+        }
+    }
+    if(type === 'hcl'){
+        let tempvalue = value.split('');
+        if(tempvalue.length === 7){
+            if(tempvalue[0] === '#'){
+                for(let a = 1; a < tempvalue.length; a++){                   
+                        return true;    
+                }
+            }
+        }
+        
+    }
+    if(type === 'ecl'){
+        if(value === 'amb' || value === 'blu' || value === 'brn' || value === 'gry' || value === 'grn' || value === 'hzl' || value === 'oth'){
+            return true;
+        }
+    }
+    if(type === 'pid'){
+        if(value.length === 9){
+            for(let a = 0; a < value.length; a++){
+                if(!isNaN(value[a])){
+                    return true;
+                }
+            }
+        }
+    }
+    return false;   
+}
+/*part 2 end*/
 
 console.log(score);
