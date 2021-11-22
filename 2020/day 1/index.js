@@ -1,5 +1,5 @@
 var fs = require('fs');
-var data = fs.readFileSync('data');
+var data = fs.readFileSync('data.txt');
 var data = data.toString();
 var data = data.split('\n');
 

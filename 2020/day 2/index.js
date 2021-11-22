@@ -1,5 +1,5 @@
 var fs = require('fs');
-var data = fs.readFileSync('data').toString().split('\n');
+var data = fs.readFileSync('data.txt').toString().split('\n');
 var correct = 0;
 for (var i = 0; i < data.length; i++) {
     data[i] = data[i].replace(/\r/g, '');       
