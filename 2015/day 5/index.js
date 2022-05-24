@@ -66,14 +66,11 @@ function part2() {
     let correct = 0;
     let temp = input[i].split("");
 
-    //It contains a pair of any two letters that appears at least twice in the string without overlapping, like xyxy (xy) or aabcdefgaa (aa), but not like aaa (aa, but it overlaps).
-
     let pairs = [];
     for (let j = 0; j < temp.length - 1; j++) {
       pairs.push(temp[j] + temp[j + 1]);
     }
 
-    //check if there are any pairs that appear at least twice
     let double = false;
     for (let j = 0; j < pairs.length - 1; j++) {
       for (let k = j + 2; k < pairs.length; k++) {
@@ -87,7 +84,6 @@ function part2() {
       correct++;
     }
 
-    //check if temp It contains at least one letter which repeats with exactly one letter between them
     let repeat = false;
     for (let j = 0; j < temp.length - 2; j++) {
       if (temp[j] === temp[j + 2]) {
