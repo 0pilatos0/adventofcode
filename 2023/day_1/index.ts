@@ -1,22 +1,16 @@
+import chalk from "chalk";
+import path from "path";
 import { part1 } from "./solutions/part1";
 import { part2 } from "./solutions/part2";
-import fs from "fs";
-import path from "path";
-import chalk from "chalk";
-
-const { readFileSync } = fs;
 
 const USETESTINPUT = false;
 
-/* Input definition */
-const testInput = readFileSync(
-  path.join(__dirname, "input", "input_test.txt"),
-  "utf8"
-);
-const realInput = readFileSync(
-  path.join(__dirname, "input", "input_real.txt"),
-  "utf8"
-);
+const testInput = await Bun.file(
+  path.join(__dirname, "input", "input_test.txt")
+).text();
+const realInput = await Bun.file(
+  path.join(__dirname, "input", "input_real.txt")
+).text();
 
 const input = USETESTINPUT ? testInput : realInput;
 
