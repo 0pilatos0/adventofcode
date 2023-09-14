@@ -6,10 +6,10 @@ import { part2 } from "./solutions/part2";
 const USETESTINPUT = false;
 
 const testInput = await Bun.file(
-  path.join(__dirname, "input", "input_test.txt")
+  path.join(import.meta.dir, "input", "input_test.txt")
 ).text();
 const realInput = await Bun.file(
-  path.join(__dirname, "input", "input_real.txt")
+  path.join(import.meta.dir, "input", "input_real.txt")
 ).text();
 
 const input = USETESTINPUT ? testInput : realInput;
