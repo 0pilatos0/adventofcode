@@ -16,8 +16,8 @@ const input = USETESTINPUT ? testInput : realInput;
 
 /* Helper function to format section headers */
 function formatSectionHeader(title: string) {
-  const line = "=".repeat(title.length + 4);
-  const formattedTitle = `  ${title}  `;
+  const line = "=".repeat(title.length + 12);
+  const formattedTitle = `      ${title}  `;
   return `${line}\n${formattedTitle}\n${line}`;
 }
 
