@@ -19,8 +19,8 @@ Welcome to my Advent of Code repository, where I tackle daily coding puzzles thr
 
 I've shared my solutions to the Advent of Code puzzles in this repository. You can explore the solutions for each day in the respective folders.
 
-- [2023 Day 1](/2023/day1)
-- [2023 Day 2](/2023/day2)
+- [2023 Day 1](/2023/day%201)
+- [2023 Day 2](/2023/day%202)
 - ...
 
 Feel free to browse the code, learn from it, or use it as a reference for your own solutions.
