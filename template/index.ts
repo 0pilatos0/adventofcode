@@ -3,7 +3,22 @@ import path from "path";
 import { part1 } from "./solutions/part1";
 import { part2 } from "./solutions/part2";
 
-const USETESTINPUT = false;
+//The default value for using the test input, this can be overwritten by passing in the --test or --real flag when running the script
+let USETESTINPUT = true;
+
+const args = process.argv.slice(2);
+if (args.length > 0) {
+  if (args[0] === "--test") USETESTINPUT = true;
+  if (args[0] === "--real") USETESTINPUT = false;
+}
+
+console.log(
+  chalk.blue(
+    "Advent of Code 2023 - using the " +
+      chalk.bold(USETESTINPUT ? "test" : "real") +
+      " input"
+  )
+);
 
 const testInput = await Bun.file(
   path.join(import.meta.dir, "input", "input_test.txt")
