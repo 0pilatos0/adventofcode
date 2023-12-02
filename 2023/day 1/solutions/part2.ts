@@ -18,18 +18,8 @@ export function part2(input: string): string {
     let firstNumber;
     let lastNumber;
 
-    console.log("-------");
-
     for (let j = 0; j < lines[i].length; j++) {
       if (!isNaN(parseInt(lines[i][j]))) {
-        console.log(
-          "found number",
-          lines[i][j],
-          "at position",
-          j,
-          "in line",
-          lines[i]
-        );
         firstNumber = lines[i][j];
         break;
       }
@@ -43,14 +33,6 @@ export function part2(input: string): string {
 
     for (let j = lines[i].length - 1; j >= 0; j--) {
       if (!isNaN(parseInt(lines[i][j]))) {
-        console.log(
-          "found number",
-          lines[i][j],
-          "at position",
-          j,
-          "in line",
-          lines[i]
-        );
         lastNumber = lines[i][j];
         break;
       }
@@ -77,7 +59,6 @@ function checkIfNumberStartsOnPosition(
   line: string[],
   position: number
 ): number | null {
-  // check if on this position a number from the digitmap starts and return the number if all following letters match the number as well or return null if not\
   for (const digit of digetMap) {
     if (line[position] === digit.letters[0]) {
       let match = true;
@@ -88,14 +69,6 @@ function checkIfNumberStartsOnPosition(
         }
       }
       if (match) {
-        console.log(
-          "found number",
-          digit.number,
-          "at position",
-          position,
-          "in line",
-          line
-        );
         return digit.number;
       }
     }
@@ -108,7 +81,6 @@ function checkIfNumberEndsOnPosition(
   line: string[],
   position: number
 ): number | null {
-  // check if on this position a number from the digitmap starts and return the number if all following letters match the number as well or return null if not\
   for (const digit of digetMap) {
     if (line[position] === digit.letters[digit.letters.length - 1]) {
       let match = true;
@@ -121,14 +93,6 @@ function checkIfNumberEndsOnPosition(
         }
       }
       if (match) {
-        console.log(
-          "found number",
-          digit.number,
-          "at position",
-          position,
-          "in line",
-          line
-        );
         return digit.number;
       }
     }
