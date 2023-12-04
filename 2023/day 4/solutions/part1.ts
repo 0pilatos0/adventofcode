@@ -4,16 +4,23 @@ export function part1(input: string): string {
     winningNumbers: number[];
     myNumbers: number[];
     points: number;
-  }
-  
+  };
+
   const lines = input.split("\n");
 
   const cards: Card[] = [];
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     const cardNumber = parseInt(line.split(":")[0].split(" ")[1]);
-    const winningNumbers = line.split("|")[0].split(": ")[1].split( /(?=(?:...)*$)/ ).map((x) => parseInt(x));
-    const myNumbers = line.split("|")[1].split(/(?=(?:...)*$)/).map((x) => parseInt(x));
+    const winningNumbers = line
+      .split("|")[0]
+      .split(": ")[1]
+      .split(/(?=(?:...)*$)/)
+      .map((x) => parseInt(x));
+    const myNumbers = line
+      .split("|")[1]
+      .split(/(?=(?:...)*$)/)
+      .map((x) => parseInt(x));
     const card = {
       cardNumber: cardNumber,
       winningNumbers: winningNumbers,
