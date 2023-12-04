@@ -35,10 +35,8 @@ export function part2(input: string): string {
         }
       }
 
-      //adding new copies
       for (let j=1; j< totalMatches +1; j++) {
-        cards[i+j].copies = cards[i+j].copies + 1; //werkt wel
-        cards[i+j].copies = cards[i+j].copies++; // werkt niet
+        cards[i+j].copies = cards[i+j].copies + 1;
       }
     }
   }
