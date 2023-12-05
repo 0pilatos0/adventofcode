@@ -44,12 +44,12 @@ export function part1(input: string): string {
     maps.push(map);
   });
 
-  let lowestLocationNumber = 9999;
+  let lowestLocationNumber = Number.MAX_SAFE_INTEGER;
   for (let i = 0; i < seeds.length; i++) {
     let location = seeds[i];
     console.log(`seed: ${location}`);
 
-    let map = maps.find((x) => x.from == "seed");
+    let map = maps.find((x) => x.from === "seed");
     while (map) {
       console.log(`mapping: ${map.from} -> ${map.to}`);
 
@@ -66,14 +66,14 @@ export function part1(input: string): string {
         console.log(`new location: ${location}`);
       }
 
-      if (map?.to == "location") {
+      if (map?.to === "location") {
         if (location < lowestLocationNumber) {
           lowestLocationNumber = location;
         }
         map = undefined;
       }
 
-      map = maps.find((x) => x.from == map?.to);
+      map = maps.find((x) => x.from === map?.to);
     }
 
     console.log(`final location: ${location}`);
