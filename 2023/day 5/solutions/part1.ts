@@ -1,3 +1,5 @@
+import chalk from "chalk";
+
 export function part1(input: string): string {
   let seeds = input.split("\n")[0].split(": ")[1].split(" ").map(Number);
   type map = {
@@ -47,12 +49,9 @@ export function part1(input: string): string {
   let lowestLocationNumber = Number.MAX_SAFE_INTEGER;
   for (let i = 0; i < seeds.length; i++) {
     let location = seeds[i];
-    console.log(`seed: ${location}`);
-
     let map = maps.find((x) => x.from === "seed");
     while (map) {
-      console.log(`mapping: ${map.from} -> ${map.to}`);
-
+      let oldLocation = location;
       let mapEntry = map.mapEntries.find(
         (x) =>
           location >= x.sourceRangeStart &&
@@ -63,8 +62,11 @@ export function part1(input: string): string {
         location =
           mapEntry.destinationRangeStart +
           (location - mapEntry.sourceRangeStart);
-        console.log(`new location: ${location}`);
       }
+
+      console.log(
+        chalk.yellow("mapped") + chalk.blue(` ${oldLocation} -> ${location}`)
+      );
 
       if (map?.to === "location") {
         if (location < lowestLocationNumber) {
@@ -76,7 +78,7 @@ export function part1(input: string): string {
       map = maps.find((x) => x.from === map?.to);
     }
 
-    console.log(`final location: ${location}`);
+    console.log(chalk.red(`final seed location: ${location}`));
   }
 
   return lowestLocationNumber.toString();
