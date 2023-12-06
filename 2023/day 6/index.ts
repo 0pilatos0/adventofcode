@@ -38,6 +38,23 @@ function formatSectionHeader(title: string) {
 
 /* call the results */
 console.log(formatSectionHeader("Part 1"));
-console.log(chalk.yellow(part1(input)));
+let p1StartTime = Date.now();
+let part1Result = part1(input);
+let p1EndTime = Date.now();
+
+console.log(
+  chalk.green("Part 1: ") +
+    chalk.bold(part1Result) +
+    chalk.gray(` [${p1EndTime - p1StartTime}ms]`)
+);
+
 console.log(formatSectionHeader("Part 2"));
-console.log(chalk.yellow(part2(input)));
+let p2StartTime = Date.now();
+let part2Result = part2(input);
+let p2EndTime = Date.now();
+
+console.log(
+  chalk.green("Part 2: ") +
+    chalk.bold(part2Result) +
+    chalk.gray(` [${p2EndTime - p2StartTime}ms]`)
+);
