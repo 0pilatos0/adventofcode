@@ -33,7 +33,7 @@ const input = USETESTINPUT ? testInput : realInput;
 function formatSectionHeader(title: string) {
   const line = "=".repeat(title.length + 12);
   const formattedTitle = `      ${title}  `;
-  return `${line}\n${formattedTitle}\n${line}`;
+  return `${line}\n${chalk.green(formattedTitle)}\n${line}`;
 }
 
 /* call the results */
@@ -43,9 +43,7 @@ let part1Result = part1(input);
 let p1EndTime = Date.now();
 
 console.log(
-  chalk.green("Part 1: ") +
-    chalk.bold(part1Result) +
-    chalk.gray(` [${p1EndTime - p1StartTime}ms]`)
+  chalk.bold(part1Result) + chalk.gray(` [${p1EndTime - p1StartTime}ms]`)
 );
 
 console.log(formatSectionHeader("Part 2"));
@@ -54,7 +52,5 @@ let part2Result = part2(input);
 let p2EndTime = Date.now();
 
 console.log(
-  chalk.green("Part 2: ") +
-    chalk.bold(part2Result) +
-    chalk.gray(` [${p2EndTime - p2StartTime}ms]`)
+  chalk.bold(part2Result) + chalk.gray(` [${p2EndTime - p2StartTime}ms]`)
 );
