@@ -42,6 +42,8 @@ let p1StartTime = Date.now();
 let part1Result = part1(input);
 let p1EndTime = Date.now();
 
+if (part1Result === "248188715") throw new Error("Part 1 is not correct");
+
 console.log(
   chalk.bold(part1Result) + chalk.gray(` [${p1EndTime - p1StartTime}ms]`)
 );
