@@ -15,11 +15,25 @@ export function part2(input: string): string {
     return { key, left, right };
   });
 
-  let positions = maps
-    .filter((map) => map.key.endsWith("A"))
-    .map((map) => map.key);
+  type Runner = {
+    currentPos: string;
+    stepsSinceLastZ: number;
+    lastStepsSinceLastZ: number;
+    initialStepsSinceLastZ: number;
+    stable: boolean;
+  };
 
-  console.log(positions);
+  let positions: Runner[] = maps
+    .filter((map) => map.key.endsWith("A"))
+    .map((map) => {
+      return {
+        currentPos: map.key,
+        stepsSinceLastZ: 0,
+        lastStepsSinceLastZ: 0,
+        initialStepsSinceLastZ: 0,
+        stable: false,
+      };
+    });
 
   let steps = 0;
   let directionsIndex = 0;
@@ -28,17 +42,56 @@ export function part2(input: string): string {
   while (!foundZZZ) {
     steps++;
 
-    let newPositions: string[] = [];
+    let newPositions: Runner[] = [];
+
+    if (positions.every((position) => position.stable)) {
+      console.log(positions);
+
+      let lcm = positions[0].lastStepsSinceLastZ;
+      for (let i = 1; i < positions.length; i++) {
+        let b = positions[i].lastStepsSinceLastZ;
+        let gcd = 1;
+
+        for (let j = 1; j <= lcm && j <= b; j++) {
+          if (lcm % j === 0 && b % j === 0) {
+            gcd = j;
+          }
+        }
+
+        lcm = (lcm * b) / gcd;
+      }
+
+      steps = lcm;
+      break;
+    }
 
     positions.forEach((position) => {
-      let map = maps.find((map) => map.key === position);
+      let map = maps.find((map) => map.key === position.currentPos);
 
       if (map) {
+        let newRunner: Runner = {
+          currentPos: "",
+          stepsSinceLastZ: position.stepsSinceLastZ + 1,
+          lastStepsSinceLastZ: position.lastStepsSinceLastZ,
+          initialStepsSinceLastZ: position.initialStepsSinceLastZ,
+          stable: position.stable,
+        };
         if (directions[directionsIndex] === "Left") {
-          newPositions.push(map.left);
+          newRunner.currentPos = map.left;
         } else {
-          newPositions.push(map.right);
+          newRunner.currentPos = map.right;
         }
+
+        if (newRunner.currentPos.endsWith("Z")) {
+          if (newRunner.stable === false) {
+            newRunner.initialStepsSinceLastZ = newRunner.stepsSinceLastZ;
+          }
+          newRunner.lastStepsSinceLastZ = position.stepsSinceLastZ + 1;
+          newRunner.stepsSinceLastZ = 0;
+          newRunner.stable = true;
+        }
+
+        newPositions.push(newRunner);
       }
     });
 
@@ -48,21 +101,6 @@ export function part2(input: string): string {
 
     if (directionsIndex === directions.length) {
       directionsIndex = 0;
-    }
-
-    //if all positions end in a Z, we're done
-    if (positions.every((position) => position.endsWith("Z"))) {
-      break;
-    }
-
-    if (steps % 1000 === 0) {
-      console.log(positions);
-      //log how many steps are matching the ending with Z so we can see progress
-      console.log(
-        `${steps} steps: ${
-          positions.filter((position) => position.endsWith("Z")).length
-        } positions ending in Z`
-      );
     }
   }
 
