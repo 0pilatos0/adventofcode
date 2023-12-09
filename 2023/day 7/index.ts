@@ -53,6 +53,8 @@ let p2StartTime = Date.now();
 let part2Result = part2(input);
 let p2EndTime = Date.now();
 
+if (part2Result !== "245461700" && part2Result !== "6839")
+  throw new Error("Part 2 is not correct, received: " + part2Result);
 console.log(
   chalk.bold(part2Result) + chalk.gray(` [${p2EndTime - p2StartTime}ms]`)
 );

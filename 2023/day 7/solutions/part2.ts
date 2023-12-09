@@ -1,5 +1,6 @@
 type Hand = {
-  value: String;
+  value: string;
+  originalValue: string;
   bid: number;
   type?: HandType;
 };
@@ -27,6 +28,7 @@ const possibleValuesInsteadOfJoker = [
   "4",
   "3",
   "2",
+  "J",
 ];
 
 export function part2(input: string): string {
@@ -39,37 +41,14 @@ export function part2(input: string): string {
 
     let newHand: Hand = {
       value: value,
+      originalValue: value,
       bid: bid,
     };
 
     newHand.type = getHandType(newHand);
 
     if (value.includes("J")) {
-      console.log("Joker found in hand: " + value);
-
-      let bestHand = newHand;
-      let posibleNewHands: Hand[] = [bestHand];
-      let amountOfJokers = value.split("J").length - 1;
-      for (let i = 0; i < amountOfJokers; i++) {
-        for (let j = 0; j < possibleValuesInsteadOfJoker.length; j++) {
-          let newValue = value.split("J");
-          newValue[i] = possibleValuesInsteadOfJoker[j];
-          let newValueText = newValue.join("");
-
-          let newHand: Hand = {
-            value: newValueText,
-            bid: bid,
-          };
-
-          newHand.type = getHandType(newHand);
-
-          posibleNewHands.push(newHand);
-        }
-      }
-
-      posibleNewHands = sortHands(posibleNewHands);
-      bestHand = posibleNewHands[posibleNewHands.length - 1];
-
+      let bestHand = getBestHand(newHand, value);
       hands.push(bestHand);
     } else {
       hands.push(newHand);
@@ -77,6 +56,7 @@ export function part2(input: string): string {
   });
 
   hands = sortHands(hands);
+  console.log(hands);
 
   let totalResult = 0;
   for (let i = 0; i < hands.length; i++) {
@@ -85,6 +65,39 @@ export function part2(input: string): string {
   }
 
   return String(totalResult);
+}
+
+export function getBestHand(newHand: Hand, value: string) {
+  let bestHand: Hand = newHand;
+  let posibleNewHands: Hand[] = [newHand];
+
+  let indexesOfJokers = [];
+  for (let i = 0; i < value.length; i++)
+    if (value[i] === "J") indexesOfJokers.push(i);
+
+  for (let i = 0; i < indexesOfJokers.length; i++) {
+    for (let x = 0; x < indexesOfJokers.length; x++) {
+      for (let j = 0; j < possibleValuesInsteadOfJoker.length; j++) {
+        let newValue = value.split("");
+        newValue[indexesOfJokers[i]] = possibleValuesInsteadOfJoker[j];
+        newValue[indexesOfJokers[x]] = possibleValuesInsteadOfJoker[j];
+
+        let newHand: Hand = {
+          value: newValue.join(""),
+          originalValue: value,
+          bid: bestHand.bid,
+        };
+
+        newHand.type = getHandType(newHand);
+
+        posibleNewHands.push(newHand);
+      }
+    }
+  }
+
+  posibleNewHands = sortHands(posibleNewHands);
+  bestHand = posibleNewHands[posibleNewHands.length - 1];
+  return bestHand;
 }
 
 function sortHands(hands: Hand[]): Hand[] {
@@ -121,8 +134,8 @@ function sortHands(hands: Hand[]): Hand[] {
 
 function isValueWorse(hand1: Hand, hand2: Hand): boolean {
   let lettersInOrder = "AKQT98765432J";
-  let hand1Values = hand1.value.split("");
-  let hand2Values = hand2.value.split("");
+  let hand1Values = hand1.originalValue.split("");
+  let hand2Values = hand2.originalValue.split("");
 
   for (let i = 0; i < hand1Values.length; i++) {
     let hand1Letter = hand1Values[i];
@@ -243,7 +256,7 @@ function isHighCard(hand: Hand): boolean {
   return allValuesUnique;
 }
 
-function getHandType(hand: Hand): HandType {
+export function getHandType(hand: Hand): HandType {
   switch (true) {
     case isFiveOfAKind(hand):
       return HandType.FiveOfAKind;
