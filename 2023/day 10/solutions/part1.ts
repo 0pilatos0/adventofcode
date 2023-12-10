@@ -33,7 +33,7 @@ export function part1(input: string): string {
     pipeLines.push(getNextPipe(lines, pipeLines, position));
     position = pipeLines[pipeLines.length - 1];
 
-    console.log("Next pipe detected at", position);
+    // console.log("Next pipe detected at", position);
 
     if (position.value === "S") {
       foundEnd = true;
@@ -47,25 +47,45 @@ function getFirstPipe(lines: string[][], position: PipeEntry): PipeEntry {
   //check north
   let north = lines[position.y - 1][position.x];
   if (north === "|" || north === "7" || north === "F") {
-    return { x: position.x, y: position.y - 1, value: north, direction: "N" };
+    if (north === "F")
+      return { x: position.x, y: position.y - 1, value: north, direction: "E" };
+    if (north === "7")
+      return { x: position.x, y: position.y - 1, value: north, direction: "W" };
+    else
+      return { x: position.x, y: position.y - 1, value: north, direction: "N" };
   }
 
   //check east
   let east = lines[position.y][position.x + 1];
   if (east === "-" || east === "J" || east === "7") {
-    return { x: position.x + 1, y: position.y, value: east, direction: "E" };
+    if (east === "J")
+      return { x: position.x + 1, y: position.y, value: east, direction: "N" };
+    if (east === "7")
+      return { x: position.x + 1, y: position.y, value: east, direction: "S" };
+    else
+      return { x: position.x + 1, y: position.y, value: east, direction: "E" };
   }
 
   //check south
   let south = lines[position.y + 1][position.x];
   if (south === "|" || south === "L" || south === "J") {
-    return { x: position.x, y: position.y + 1, value: south, direction: "S" };
+    if (south === "L")
+      return { x: position.x, y: position.y + 1, value: south, direction: "E" };
+    if (south === "J")
+      return { x: position.x, y: position.y + 1, value: south, direction: "W" };
+    else
+      return { x: position.x, y: position.y + 1, value: south, direction: "S" };
   }
 
   //check west
   let west = lines[position.y][position.x - 1];
   if (west === "-" || west === "L" || west === "F") {
-    return { x: position.x - 1, y: position.y, value: west, direction: "W" };
+    if (west === "L")
+      return { x: position.x - 1, y: position.y, value: west, direction: "N" };
+    if (west === "F")
+      return { x: position.x - 1, y: position.y, value: west, direction: "S" };
+    else
+      return { x: position.x - 1, y: position.y, value: west, direction: "W" };
   }
 
   throw new Error("No pipe found");

@@ -33,39 +33,96 @@ export function part2(input: string): string {
     pipeLines.push(getNextPipe(lines, pipeLines, position));
     position = pipeLines[pipeLines.length - 1];
 
-    console.log("Next pipe detected at", position);
+    // console.log("Next pipe detected at", position);
 
     if (position.value === "S") {
       foundEnd = true;
     }
   }
 
-  return ((pipeLines.length - 1) / 2).toString();
+  for (let y = 0; y < lines.length; y++) {
+    for (let x = 0; x < lines[y].length; x++) {
+      if (!pipeLines.some((pipe) => pipe.x === x && pipe.y === y)) {
+        lines[y][x] = ".";
+      }
+    }
+  }
+
+  let tilesInside = 0;
+  for (let y = 0; y < lines.length; y++) {
+    for (let x = 0; x < lines[y].length; x++) {
+      if (pointInPolygon(x, y, pipeLines)) {
+        tilesInside++;
+
+        lines[y][x] = "#";
+      }
+    }
+  }
+
+  return tilesInside.toString();
+}
+
+function pointInPolygon(x: number, y: number, pipeLines: PipeEntry[]): boolean {
+  if (pipeLines.some((pipe) => pipe.x === x && pipe.y === y)) return false;
+
+  let inside = false;
+  for (let i = 0, j = pipeLines.length - 1; i < pipeLines.length; j = i++) {
+    let xi = pipeLines[i].x,
+      yi = pipeLines[i].y;
+    let xj = pipeLines[j].x,
+      yj = pipeLines[j].y;
+
+    let intersect =
+      yi > y != yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi;
+    if (intersect) inside = !inside;
+  }
+
+  return inside;
 }
 
 function getFirstPipe(lines: string[][], position: PipeEntry): PipeEntry {
   //check north
   let north = lines[position.y - 1][position.x];
   if (north === "|" || north === "7" || north === "F") {
-    return { x: position.x, y: position.y - 1, value: north, direction: "N" };
+    if (north === "F")
+      return { x: position.x, y: position.y - 1, value: north, direction: "E" };
+    if (north === "7")
+      return { x: position.x, y: position.y - 1, value: north, direction: "W" };
+    else
+      return { x: position.x, y: position.y - 1, value: north, direction: "N" };
   }
 
   //check east
   let east = lines[position.y][position.x + 1];
   if (east === "-" || east === "J" || east === "7") {
-    return { x: position.x + 1, y: position.y, value: east, direction: "E" };
+    if (east === "J")
+      return { x: position.x + 1, y: position.y, value: east, direction: "N" };
+    if (east === "7")
+      return { x: position.x + 1, y: position.y, value: east, direction: "S" };
+    else
+      return { x: position.x + 1, y: position.y, value: east, direction: "E" };
   }
 
   //check south
   let south = lines[position.y + 1][position.x];
   if (south === "|" || south === "L" || south === "J") {
-    return { x: position.x, y: position.y + 1, value: south, direction: "S" };
+    if (south === "L")
+      return { x: position.x, y: position.y + 1, value: south, direction: "E" };
+    if (south === "J")
+      return { x: position.x, y: position.y + 1, value: south, direction: "W" };
+    else
+      return { x: position.x, y: position.y + 1, value: south, direction: "S" };
   }
 
   //check west
   let west = lines[position.y][position.x - 1];
   if (west === "-" || west === "L" || west === "F") {
-    return { x: position.x - 1, y: position.y, value: west, direction: "W" };
+    if (west === "L")
+      return { x: position.x - 1, y: position.y, value: west, direction: "N" };
+    if (west === "F")
+      return { x: position.x - 1, y: position.y, value: west, direction: "S" };
+    else
+      return { x: position.x - 1, y: position.y, value: west, direction: "W" };
   }
 
   throw new Error("No pipe found");
