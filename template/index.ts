@@ -12,20 +12,10 @@ if (args.length > 0) {
   if (args[0] === "--real") USETESTINPUT = false;
 }
 
-console.log(
-  chalk.blue(
-    "Advent of Code 2023 - using the " +
-      chalk.bold(USETESTINPUT ? "test" : "real") +
-      " input"
-  )
-);
+console.log(chalk.blue("Advent of Code 2023 - using the " + chalk.bold(USETESTINPUT ? "test" : "real") + " input"));
 
-const testInput = await Bun.file(
-  path.join(import.meta.dir, "input", "input_test.txt")
-).text();
-const realInput = await Bun.file(
-  path.join(import.meta.dir, "input", "input_real.txt")
-).text();
+const testInput = await Bun.file(path.join(import.meta.dir, "input", "input_test.txt")).text();
+const realInput = await Bun.file(path.join(import.meta.dir, "input", "input_real.txt")).text();
 
 const input = USETESTINPUT ? testInput : realInput;
 
@@ -42,15 +32,11 @@ let p1StartTime = Date.now();
 let part1Result = part1(input);
 let p1EndTime = Date.now();
 
-console.log(
-  chalk.bold(part1Result) + chalk.gray(` [${p1EndTime - p1StartTime}ms]`)
-);
+console.log(chalk.bold(part1Result) + chalk.gray(` [${p1EndTime - p1StartTime}ms]`));
 
 console.log(formatSectionHeader("Part 2"));
 let p2StartTime = Date.now();
 let part2Result = part2(input);
 let p2EndTime = Date.now();
 
-console.log(
-  chalk.bold(part2Result) + chalk.gray(` [${p2EndTime - p2StartTime}ms]`)
-);
+console.log(chalk.bold(part2Result) + chalk.gray(` [${p2EndTime - p2StartTime}ms]`));
