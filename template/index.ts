@@ -3,39 +3,74 @@ import path from "path";
 import { part1 } from "./solutions/part1";
 import { part2 } from "./solutions/part2";
 
-//The default value for using the test input, this can be overwritten by passing in the --test or --real flag when running the script
+// Default to test input, overridden by flags
 let USETESTINPUT = true;
 
+// Process command-line arguments
 const args = process.argv.slice(2);
-if (args.length > 0) {
-  if (args[0] === "--real") USETESTINPUT = false;
+if (args.includes("--real")) USETESTINPUT = false;
+if (args.includes("--test")) USETESTINPUT = true;
+
+// Fancy ASCII Art Header
+console.clear();
+console.log(
+  chalk.red.bold(`
+★  ☆  ✨  🎄  ✨  ☆  ★
+ 🎅 ADVENT OF CODE 🎅
+   ★  ☆  2024  ☆  ★
+★  ☆  ✨  🎄  ✨  ☆  ★
+  `)
+);
+console.log(chalk.blue(`Using ${chalk.bold(USETESTINPUT ? "test" : "real")} input\n`));
+
+// Helper function to format section headers
+function formatSectionHeader(title: string) {
+  const line = "━".repeat(title.length + 12);
+  const formattedTitle = `      ${title}  `;
+  return `${chalk.yellow(line)}\n${chalk.green.bold(formattedTitle)}\n${chalk.yellow(line)}`;
 }
 
-console.log(chalk.blue("Advent of Code 2023 - using the " + chalk.bold(USETESTINPUT ? "test" : "real") + " input"));
+// Load input files
+const inputDir = path.join(import.meta.dir, "input");
+const testInputPath = path.join(inputDir, "input_test.txt");
+const realInputPath = path.join(inputDir, "input_real.txt");
 
-const testInput = await Bun.file(path.join(import.meta.dir, "input", "input_test.txt")).text();
-const realInput = await Bun.file(path.join(import.meta.dir, "input", "input_real.txt")).text();
+// Verify input files
+function verifyFile(filePath: string) {
+  try {
+    Bun.file(filePath).text();
+  } catch {
+    console.log(chalk.red(`❌ Missing input file: ${filePath}`));
+    process.exit(1);
+  }
+}
+verifyFile(testInputPath);
+verifyFile(realInputPath);
 
+const testInput = await Bun.file(testInputPath).text();
+const realInput = await Bun.file(realInputPath).text();
 const input = USETESTINPUT ? testInput : realInput;
 
-/* Helper function to format section headers */
-function formatSectionHeader(title: string) {
-  const line = "=".repeat(title.length + 12);
-  const formattedTitle = `      ${title}  `;
-  return `${line}\n${chalk.green(formattedTitle)}\n${line}`;
+// Function to execute and profile a solution
+async function executeSolution(partName: string, solutionFn: (input: string) => unknown, input: string) {
+  console.log(formatSectionHeader(partName));
+
+  const startTime = performance.now();
+  try {
+    const result = await solutionFn(input);
+    const endTime = performance.now();
+
+    console.log(`${chalk.bold("Result:")} ${chalk.cyan(result)}`);
+    console.log(chalk.gray(`[Execution time: ${(endTime - startTime).toFixed(2)}ms]\n`));
+  } catch (error) {
+    console.log(chalk.red(`⚠️ Error in ${partName}:`));
+    console.error(error);
+  }
 }
 
-/* call the results */
-console.log(formatSectionHeader("Part 1"));
-const p1StartTime = Date.now();
-const part1Result = part1(input);
-const p1EndTime = Date.now();
+// Execute parts
+await executeSolution("Part 1", part1, input);
+await executeSolution("Part 2", part2, input);
 
-console.log(chalk.bold(part1Result) + chalk.gray(` [${p1EndTime - p1StartTime}ms]`));
-
-console.log(formatSectionHeader("Part 2"));
-const p2StartTime = Date.now();
-const part2Result = part2(input);
-const p2EndTime = Date.now();
-
-console.log(chalk.bold(part2Result) + chalk.gray(` [${p2EndTime - p2StartTime}ms]`));
+// Summary
+console.log("\n" + chalk.bold.bgGreen(" 🎉 Task Completed! 🎉 "));
