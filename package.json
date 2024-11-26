@@ -3,7 +3,8 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "lint": "npx eslint ."
+    "lint": "npx eslint .",
+    "cli": "bun cli.ts"
   },
   "devDependencies": {
     "@tsconfig/node16": "^16.1.3",
