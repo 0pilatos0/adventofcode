@@ -20,24 +20,36 @@ export function part2(input: string): string {
   }
 
   for (const line of lines) {
-    const direction: "Ascending" | "Descending" = line[1] > line[0] ? "Ascending" : "Descending";
-    let valid = true;
-    let usedSkip = false;
+    const lineVariants: number[][] = [];
+    let foundValid = false;
 
-    for (let i = 1; i < line.length; i++) {
-      if (!compare(line[i], line[i - 1], direction)) {
-        //check if when we skip the current value, the next value is valid with the previous value
-        if (!usedSkip && compare(line[i], line[i - 2], direction)) {
-          usedSkip = true;
-          continue;
+    for (let i = 0; i < line.length; i++) {
+      const lineVariant = line.slice();
+      lineVariant.splice(i, 1);
+      lineVariants.push(lineVariant);
+    }
+
+    lineVariants.push(line);
+
+    for (const lineVariant of lineVariants) {
+      const direction: "Ascending" | "Descending" = lineVariant[1] > lineVariant[0] ? "Ascending" : "Descending";
+
+      let valid = true;
+
+      for (let i = 1; i < lineVariant.length; i++) {
+        if (!compare(lineVariant[i], lineVariant[i - 1], direction)) {
+          valid = false;
+          break;
         }
+      }
 
-        valid = false;
+      if (valid) {
+        foundValid = true;
         break;
       }
     }
 
-    if (valid) {
+    if (foundValid) {
       safeReports++;
     }
   }
