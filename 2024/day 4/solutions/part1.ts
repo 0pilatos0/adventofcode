@@ -1,6 +1,5 @@
 export function part1(input: string): string {
-  // Create 2D matrix of the input split by line and by character
-  const matrix = input.split("\n").map((line) => line.split(""));
+  const matrix = input.split("\r\n").map((line) => line.split(""));
   const height = matrix.length;
   const width = matrix[0].length;
 
@@ -17,7 +16,6 @@ export function part1(input: string): string {
   ];
   let timesFound = 0;
 
-  // Helper function to check if the word exists in a given direction
   const isWordFound = (row: number, col: number, direction: number[]): boolean => {
     for (let i = 0; i < wordToFind.length; i++) {
       const newRow = row + i * direction[0];
