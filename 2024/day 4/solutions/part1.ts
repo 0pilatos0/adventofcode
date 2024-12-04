@@ -48,7 +48,7 @@ export function part1(input: string): string {
   };
 
   const checkTopRightToBottomLeft = (row: number, col: number) => {
-    if (row + wordtofind.length > height || col - wordtofind.length < 0) return false;
+    if (row + wordtofind.length > height || col - wordtofind.length + 1 < 0) return false;
     for (let i = 0; i < wordtofind.length; i++) {
       if (matrix[row + i][col - i] !== wordtofind[i]) return false;
     }
@@ -56,7 +56,7 @@ export function part1(input: string): string {
   };
 
   const checkBottomLeftToTopRight = (row: number, col: number) => {
-    if (row - wordtofind.length < 0 || col + wordtofind.length > width) return false;
+    if (row - wordtofind.length + 1 < 0 || col + wordtofind.length > width) return false;
     for (let i = 0; i < wordtofind.length; i++) {
       if (matrix[row - i][col + i] !== wordtofind[i]) return false;
     }
@@ -64,7 +64,7 @@ export function part1(input: string): string {
   };
 
   const checkBottomRightToTopLeft = (row: number, col: number) => {
-    if (row - wordtofind.length < 0 || col - wordtofind.length + 1 < 0) return false;
+    if (row - wordtofind.length + 1 < 0 || col - wordtofind.length + 1 < 0) return false;
     for (let i = 0; i < wordtofind.length; i++) {
       if (matrix[row - i][col - i] !== wordtofind[i]) return false;
     }
