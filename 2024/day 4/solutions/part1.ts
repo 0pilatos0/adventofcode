@@ -27,11 +27,9 @@ export function part1(input: string): string {
     return true;
   };
 
-  // Iterate over the matrix
   for (let row = 0; row < height; row++) {
     for (let col = 0; col < width; col++) {
       if (matrix[row][col] === wordToFind[0]) {
-        // Check all 8 possible directions
         for (const direction of directions) {
           if (isWordFound(row, col, direction)) {
             timesFound++;
