@@ -1,86 +1,45 @@
 export function part1(input: string): string {
-  //create 2d matrix of the input split by line and by character
-  const matrix = input.split("\r\n").map((line) => line.split(""));
+  // Create 2D matrix of the input split by line and by character
+  const matrix = input.split("\n").map((line) => line.split(""));
   const height = matrix.length;
   const width = matrix[0].length;
 
-  const wordtofind = "XMAS";
+  const wordToFind = "XMAS";
+  const directions = [
+    [0, 1], // right
+    [1, 0], // down
+    [0, -1], // left
+    [-1, 0], // up
+    [1, 1], // right down diagonal
+    [1, -1], // left down diagonal
+    [-1, -1], // left up diagonal
+    [-1, 1], // right up diagonal
+  ];
   let timesFound = 0;
 
-  const checkRightToLeft = (row: number, col: number) => {
-    if (col + wordtofind.length > width) return false;
-    for (let i = 0; i < wordtofind.length; i++) {
-      if (matrix[row][col + i] !== wordtofind[i]) return false;
+  // Helper function to check if the word exists in a given direction
+  const isWordFound = (row: number, col: number, direction: number[]): boolean => {
+    for (let i = 0; i < wordToFind.length; i++) {
+      const newRow = row + i * direction[0];
+      const newCol = col + i * direction[1];
+      if (newRow < 0 || newRow >= height || newCol < 0 || newCol >= width || matrix[newRow][newCol] !== wordToFind[i]) {
+        return false;
+      }
     }
     return true;
   };
 
-  const checkLeftToRight = (row: number, col: number) => {
-    if (col - wordtofind.length < 0) return false;
-    for (let i = 0; i < wordtofind.length; i++) {
-      if (matrix[row][col - i] !== wordtofind[i]) return false;
-    }
-    return true;
-  };
-
-  const checkTopToBottom = (row: number, col: number) => {
-    if (row + wordtofind.length > height) return false;
-    for (let i = 0; i < wordtofind.length; i++) {
-      if (matrix[row + i][col] !== wordtofind[i]) return false;
-    }
-    return true;
-  };
-
-  const checkBottomToTop = (row: number, col: number) => {
-    if (row - wordtofind.length < 0) return false;
-    for (let i = 0; i < wordtofind.length; i++) {
-      if (matrix[row - i][col] !== wordtofind[i]) return false;
-    }
-    return true;
-  };
-
-  const checkTopLeftToBottomRight = (row: number, col: number) => {
-    if (row + wordtofind.length > height || col + wordtofind.length > width) return false;
-    for (let i = 0; i < wordtofind.length; i++) {
-      if (matrix[row + i][col + i] !== wordtofind[i]) return false;
-    }
-    return true;
-  };
-
-  const checkTopRightToBottomLeft = (row: number, col: number) => {
-    if (row + wordtofind.length > height || col - wordtofind.length + 1 < 0) return false;
-    for (let i = 0; i < wordtofind.length; i++) {
-      if (matrix[row + i][col - i] !== wordtofind[i]) return false;
-    }
-    return true;
-  };
-
-  const checkBottomLeftToTopRight = (row: number, col: number) => {
-    if (row - wordtofind.length + 1 < 0 || col + wordtofind.length > width) return false;
-    for (let i = 0; i < wordtofind.length; i++) {
-      if (matrix[row - i][col + i] !== wordtofind[i]) return false;
-    }
-    return true;
-  };
-
-  const checkBottomRightToTopLeft = (row: number, col: number) => {
-    if (row - wordtofind.length + 1 < 0 || col - wordtofind.length + 1 < 0) return false;
-    for (let i = 0; i < wordtofind.length; i++) {
-      if (matrix[row - i][col - i] !== wordtofind[i]) return false;
-    }
-    return true;
-  };
-
+  // Iterate over the matrix
   for (let row = 0; row < height; row++) {
     for (let col = 0; col < width; col++) {
-      if (checkRightToLeft(row, col)) timesFound++;
-      if (checkLeftToRight(row, col)) timesFound++;
-      if (checkTopToBottom(row, col)) timesFound++;
-      if (checkBottomToTop(row, col)) timesFound++;
-      if (checkTopLeftToBottomRight(row, col)) timesFound++;
-      if (checkTopRightToBottomLeft(row, col)) timesFound++;
-      if (checkBottomLeftToTopRight(row, col)) timesFound++;
-      if (checkBottomRightToTopLeft(row, col)) timesFound++;
+      if (matrix[row][col] === wordToFind[0]) {
+        // Check all 8 possible directions
+        for (const direction of directions) {
+          if (isWordFound(row, col, direction)) {
+            timesFound++;
+          }
+        }
+      }
     }
   }
 
