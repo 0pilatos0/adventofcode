@@ -40,8 +40,6 @@ export function part2(input: string): string {
     }
   }
 
-  console.log(invalidUpdates);
-
   invalidUpdates = invalidUpdates.map((update) => {
     return update.sort((a, b) => {
       const relevantRules = rulesList.filter((rule) => {
@@ -55,8 +53,6 @@ export function part2(input: string): string {
       return targetIndex;
     });
   });
-
-  console.log(invalidUpdates);
 
   const middleNumbers = invalidUpdates
     .map((update) => {
