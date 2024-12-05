@@ -1,65 +1,28 @@
 export function part2(input: string): string {
-  const [rules, pages] = input.split("\r\n\r\n");
+  const [rules, pages] = input.split("\n\n");
 
-  const rulesList = rules.split("\r\n").map((rule) => {
-    return rule.split("|");
-  });
+  const rulesList = rules.split("\n").map((rule) => rule.split("|"));
+  const updates = pages.split("\n").map((page) => page.split(","));
 
-  const updates = pages.split("\r\n").map((page) => {
-    return page.split(",");
-  });
-
-  let invalidUpdates = [];
-
-  for (const update of updates) {
-    let valid = true;
-
-    for (let index = 0; index < update.length; index++) {
-      const page = update[index];
-
-      const rules = rulesList.filter((rule) => {
-        return rule[0].includes(page);
+  const invalidUpdates = updates.filter((update) => {
+    return update.some((page, index) => {
+      return rulesList.some(([rulePage, ruleTarget]) => {
+        if (!rulePage.includes(page)) return false;
+        const targetIndex = update.indexOf(ruleTarget);
+        return targetIndex !== -1 && targetIndex < index;
       });
+    });
+  });
 
-      for (const rule of rules) {
-        const targetIndex = update.indexOf(rule[1]);
-
-        if (targetIndex === -1) {
-          continue;
-        }
-
-        if (targetIndex < index) {
-          valid = false;
-          break;
-        }
-      }
-    }
-
-    if (!valid) {
-      invalidUpdates.push(update);
-    }
-  }
-
-  invalidUpdates = invalidUpdates.map((update) => {
+  const sortedInvalidUpdates = invalidUpdates.map((update) => {
     return update.sort((a, b) => {
-      const relevantRules = rulesList.filter((rule) => {
-        return rule[0].includes(a);
-      });
-
-      const targetIndex = relevantRules.findIndex((rule) => {
-        return rule[1] === b;
-      });
-
+      const relevantRules = rulesList.filter(([rulePage]) => rulePage.includes(a));
+      const targetIndex = relevantRules.findIndex(([, ruleTarget]) => ruleTarget === b);
       return targetIndex;
     });
   });
 
-  const middleNumbers = invalidUpdates
-    .map((update) => {
-      const middleIndex = Math.floor(update.length / 2);
-      return update[middleIndex];
-    })
-    .map(Number);
+  const middleNumbers = sortedInvalidUpdates.map((update) => update[Math.floor(update.length / 2)]).map(Number);
 
   return middleNumbers.reduce((sum, number) => sum + number, 0).toString();
 }
