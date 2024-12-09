@@ -3,33 +3,33 @@ export function part1(input: string): string {
 
   let fileIndex = 0;
   let indexingFile = true;
-  let resultString = "";
+  let result = [];
 
-  for (let j = 0; j < chars.length; j++) {
-    const numberToRepeat = parseInt(chars[j], 10);
+  for (const element of chars) {
+    const numberToRepeat = parseInt(element, 10);
     if (indexingFile) {
       for (let k = 0; k < numberToRepeat; k++) {
-        resultString += fileIndex.toString();
+        result.push(fileIndex.toString());
       }
       indexingFile = false;
       fileIndex++;
     } else {
       for (let k = 0; k < numberToRepeat; k++) {
-        resultString += ".";
+        result.push(".");
       }
       indexingFile = true;
     }
   }
 
   while (true) {
-    const firstDot = resultString.indexOf(".");
+    const firstDot = result.indexOf(".");
     if (firstDot === -1) {
       break;
     }
 
     let lastBlockIndex = -1;
-    for (let i = resultString.length - 1; i >= 0; i--) {
-      if (resultString[i] !== ".") {
+    for (let i = result.length - 1; i >= 0; i--) {
+      if (result[i] !== ".") {
         lastBlockIndex = i;
         break;
       }
@@ -39,14 +39,18 @@ export function part1(input: string): string {
       break;
     }
 
-    const blockChar = resultString[lastBlockIndex];
-    resultString = resultString.slice(0, lastBlockIndex) + resultString.slice(lastBlockIndex + 1);
-    resultString = resultString.slice(0, firstDot) + blockChar + resultString.slice(firstDot + 1);
+    const blockChar: string = result[lastBlockIndex];
+
+    result = result.slice(0, lastBlockIndex).concat(result.slice(lastBlockIndex + 1));
+    result = result
+      .slice(0, firstDot)
+      .concat(blockChar)
+      .concat(result.slice(firstDot + 1));
   }
 
   let checksum = 0;
-  for (let i = 0; i < resultString.length; i++) {
-    const ch = resultString[i];
+  for (let i = 0; i < result.length; i++) {
+    const ch = result[i];
     if (ch !== ".") {
       const fileID = parseInt(ch, 10);
       checksum += i * fileID;
