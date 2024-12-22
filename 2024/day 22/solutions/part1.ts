@@ -5,17 +5,19 @@ const randomNumber = (seed: bigint) => {
   return seed;
 };
 
+const processNumber = (num: bigint) => {
+  let seed = num;
+  for (let i = 0; i < 2000; i++) {
+    seed = randomNumber(seed);
+  }
+  return seed;
+};
+
 const calculateSum = (input: string) => {
   return input
     .split("\n")
     .map(BigInt)
-    .reduce((sum, num) => {
-      let seed = num;
-      for (let i = 0; i < 2000; i++) {
-        seed = randomNumber(seed);
-      }
-      return sum + seed;
-    }, 0n);
+    .reduce((sum, num) => sum + processNumber(num), 0n);
 };
 
 export function part1(input: string): string {
