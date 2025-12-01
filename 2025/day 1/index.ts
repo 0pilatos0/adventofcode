@@ -51,17 +51,38 @@ const testInput = await Bun.file(testInputPath).text();
 const realInput = await Bun.file(realInputPath).text();
 const input = USETESTINPUT ? testInput : realInput;
 
+// Helper function to format memory size
+function formatMemory(bytes: number): string {
+  const absBytes = Math.abs(bytes);
+  if (absBytes < 1024) return `${absBytes.toFixed(0)} B`;
+  if (absBytes < 1024 * 1024) return `${(absBytes / 1024).toFixed(2)} KB`;
+  return `${(absBytes / (1024 * 1024)).toFixed(2)} MB`;
+}
+
 // Function to execute and profile a solution
 async function executeSolution(partName: string, solutionFn: (input: string) => unknown, input: string) {
   console.log(formatSectionHeader(partName));
 
+  // Force garbage collection (Bun-specific)
+  if (typeof Bun !== "undefined" && Bun.gc) {
+    Bun.gc(true);
+  }
+
+  const memBefore = process.memoryUsage().heapUsed;
   const startTime = performance.now();
+
   try {
     const result = await solutionFn(input);
     const endTime = performance.now();
+    const memAfter = process.memoryUsage().heapUsed;
+    const memUsed = memAfter - memBefore;
 
     console.log(`${chalk.bold("Result:")} ${chalk.cyan(result)}`);
-    console.log(chalk.gray(`[Execution time: ${(endTime - startTime).toFixed(2)}ms]\n`));
+    console.log(chalk.gray(`[Execution time: ${(endTime - startTime).toFixed(2)}ms]`));
+
+    // Show memory delta (may be negative due to GC)
+    const memSign = memUsed >= 0 ? "+" : "";
+    console.log(chalk.gray(`[Memory delta: ${memSign}${formatMemory(memUsed)}]\n`));
   } catch (error) {
     console.log(chalk.red(`⚠️ Error in ${partName}:`));
     console.error(error);
