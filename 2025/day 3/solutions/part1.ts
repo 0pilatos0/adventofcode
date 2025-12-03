@@ -19,7 +19,6 @@ export function part1(input: string): string {
         secondshighestNumber = battery;
       }
     }
-    console.log(hightestNumber, secondshighestNumber);
     joltageLevels.push(parseInt(hightestNumber!.toString() + secondshighestNumber!.toString(), 10));
   }
 
